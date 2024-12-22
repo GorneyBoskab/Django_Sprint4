@@ -1,12 +1,10 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-# Получаем модель пользователя
 User = get_user_model()
 
 # Базовая модель с общими полями для других моделей
 class BaseModel(models.Model):
-    # Поле для указания опубликованности записи
     is_published = models.BooleanField(
         'Опубликовано',
         default=True,
@@ -14,12 +12,11 @@ class BaseModel(models.Model):
     )
     created_at = models.DateTimeField('Добавлено', auto_now_add=True)
 
-    # Метод для строки объекта (обычно используется в админ-панели)
     def __str__(self):
         return self.title
 
     class Meta:
-        abstract = True  # Указывает, что данная модель является абстрактной
+        abstract = True 
 
 # Модель публикации
 class Post(BaseModel):
@@ -35,7 +32,7 @@ class Post(BaseModel):
         on_delete=models.CASCADE,
         verbose_name='Автор публикации',
         related_name='posts',
-    )  # Автор публикации (связь с моделью пользователя)
+    )
     location = models.ForeignKey(
         'Location',
         blank=True,
@@ -43,7 +40,7 @@ class Post(BaseModel):
         on_delete=models.SET_NULL,
         verbose_name='Местоположение',
         related_name='posts',
-    )  # Местоположение (необязательно)
+    )
     category = models.ForeignKey(
         'Category',
         null=True,
@@ -59,37 +56,37 @@ class Post(BaseModel):
 
 # Модель категории
 class Category(BaseModel):
-    title = models.CharField('Заголовок', max_length=256)  # Заголовок категории
-    description = models.TextField('Описание')  # Описание категории
+    title = models.CharField('Заголовок', max_length=256)
+    description = models.TextField('Описание')
     slug = models.SlugField(
         'Идентификатор',
         unique=True,
         help_text='Идентификатор страницы для URL; разрешены символы латиницы, цифры, дефис и подчёркивание.'
-    )  # Уникальный идентификатор для URL
+    )
 
     class Meta:
-        verbose_name = 'категория'  # Человеко-читаемое имя модели
-        verbose_name_plural = 'Категории'  # Во множественном числе
+        verbose_name = 'категория'
+        verbose_name_plural = 'Категории'
 
 # Модель местоположения
 class Location(BaseModel):
-    name = models.CharField('Название места', max_length=256)  # Название места
+    name = models.CharField('Название места', max_length=256)
 
     def __str__(self):
-        return self.name  # Отображаем название места
+        return self.name
 
     class Meta:
-        verbose_name = 'местоположение'  # Человеко-читаемое имя модели
-        verbose_name_plural = 'Местоположения'  # Во множественном числе
+        verbose_name = 'местоположение'
+        verbose_name_plural = 'Местоположения'е
 
 # Модель комментария
 class Comment(models.Model):
-    text = models.TextField('Текст комментария')  # Текст комментария
+    text = models.TextField('Текст комментария')
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
         related_name='comments',
-    )  # Связь с публикацией
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
