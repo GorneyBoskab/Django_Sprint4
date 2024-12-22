@@ -1,9 +1,10 @@
 from django.contrib import admin
 
+# Импорт моделей для регистрации в админ-панели
 from .models import Category, Location, Post, Comment
 
-
-admin.site.register(Category)
-admin.site.register(Location)
-admin.site.register(Post)
-admin.site.register(Comment)
+# Регистрируем модели в админ-панели для управления через интерфейс
+admin.site.register(Category)  # Категории публикаций
+admin.site.register(Location)  # Местоположения
+admin.site.register(Post)      # Публикации
+admin.site.register(Comment)   # Комментарии
